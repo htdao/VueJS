@@ -4,7 +4,7 @@
     <div class="inputWrap">
       <div class="inputLabel">Tên sản phẩm<span>(*)</span></div>
       <input type="text" v-model="name.value" placeholder="Nhập tên sản phẩm" :style="name.border" v-if="product===''" @keyup="errName">
-      <input type="text" :value="data.name" placeholder="Nhập tên sản phẩm" :style="name.border" v-else>
+      <input type="text" v-model="data.name" placeholder="Nhập tên sản phẩm" :style="name.border" v-else>
       <span class="error">{{name.message}}</span>
     </div>
     <div class="inputWrap">
@@ -123,9 +123,9 @@ export default {
       data['price'] = this.data.price;
       data['quantity'] = this.data.quantity;
       this.$emit('updateProduct', data)
-      // return [
-      //  this.product = '',
-      // ]
+      return [
+       this.data = '',
+      ]
     },
     errName(){
       if (this.name.value !== ''){
@@ -144,7 +144,10 @@ export default {
         this.quantity.border = 'border-color: #f2f4f8'
         this.quantity.message =''
       }
-    }
+    },
+    // changeName(){
+    //   console.log(this.)
+    // }
   },
   watch: {
     name (value) {
@@ -169,9 +172,9 @@ export default {
       this.data = value;
     },
 
-    data(value){
-      this.data = value
-    }
+    // data(value){
+    //   this.data = value
+    // }
   }
 }
 </script>

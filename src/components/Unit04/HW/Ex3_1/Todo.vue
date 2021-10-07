@@ -36,12 +36,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-{
-  margin: 0;
-  padding: 0;
-}
-
 .container {
+    margin: 0;
+    padding: 0;
   background-color: #0080dd;
   display: flex;
   align-items: center;

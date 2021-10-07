@@ -15,6 +15,30 @@
       <div class="infoLabel">
         Xin chào
       </div>
+      <div v-if="age <= 0 || age >= 100">
+        Không phải tuổi
+      </div>
+      <div v-if="age < 16">
+        Cấp 1
+      </div>
+      <div v-else-if="age < 18">
+        Cấp 2
+      </div>
+      <div v-else-if="age < 22">
+        Cấp 3
+      </div>
+  <div>
+    <ul id="example-1">
+      <li v-for="item in items">
+        {{ item.name }}
+      </li>
+    </ul>
+  </div>
+    </div>
+  </div>
+  <div>
+    <div v-for="{product} in products" :key="product.id">
+      {{product.name}}
     </div>
   </div>
 </template>
@@ -24,6 +48,41 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      age: 100,
+      products: [
+        {
+          id: 1,
+          name: 'iphone 12',
+          price: 200000,
+          in_stock: true,
+        },
+        {
+          id: 2,
+          name: 'iphone 13',
+          price: 300000,
+          in_stock: true,
+        },
+        {
+          id: 3,
+          name: 'iphone 11',
+          price: 130000,
+          in_stock: false,
+        }
+      ],
+      items: [
+        { name: 'Cà phê' },
+        { name: 'Trà đặc' },
+        { name: 'Bò húc' }
+      ]
+    }
+  },
+  computed: {
+    inStockProduct: function (){
+      return this.products
+    }
   }
 }
 </script>

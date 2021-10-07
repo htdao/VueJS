@@ -5,10 +5,10 @@
       <table>
         <tr>
           <td>
-            <button class="btn color1" @click="destroyAll">AC</button>
+            <button class="btn color1" @click="destroyAll">C</button>
           </td>
           <td>
-            <button class="btn color1" @click="destroy">Del</button>
+            <button class="btn color1" @click="destroy">del</button>
           </td>
           <td>
             <button class="btn color1" @click="percent" value="%">%</button>
@@ -92,10 +92,10 @@ export default {
         var text = this.calc
         for (var i = 0; i < text.length; i++){
           this.list.forEach((value) => {
-            if (text[i] == value){
+            if (text[i] === value){
               point = i
             }
-            if (text.charAt(text.length - 1) == value){
+            if (text.charAt(text.length - 1) === value){
               test = true
             }
           })
@@ -171,9 +171,9 @@ export default {
 
 <style scoped lang="scss">
 .container {
-  width: 300px;
+  width: 255px;
   margin: 100px auto;
-  height: 330px;
+  height: 310px;
   background: #2c2c2c;
   border: 1px solid #2c2c2c;
   border-radius: 15px;
@@ -189,6 +189,7 @@ export default {
 
   .calculation {
     background:  #2f2f31;
+    border-radius: 5px;
 
     table{
       width: 100%;
@@ -197,7 +198,7 @@ export default {
         .btn {
           border: 1px solid #2f2f31;
           border-radius: 5px;
-          width: 71px;
+          width: 60px;
           padding: 10px;
           font-size: 20px;
           color: white;

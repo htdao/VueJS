@@ -43,11 +43,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-{
-  margin: 0;
-  padding: 0;
-}
-
 .todo-container {
   height: 75%;
   overflow: auto;

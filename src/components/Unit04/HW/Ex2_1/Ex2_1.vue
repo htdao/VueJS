@@ -2,8 +2,7 @@
   <div class="container">
     <div class="search-wrapper">
       <div class="search-box">
-        <input type="text" placeholder="Tìm kiếm theo tên sản phẩm" v-model="search"
-               @keyup.enter="searchProduct()">
+        <input type="text" placeholder="Tìm kiếm theo tên sản phẩm" v-model="search" @keyup.enter="searchProduct()">
         <div class="search-icon">
           <div class="search">
             <div class="search-circle"></div>
@@ -35,18 +34,10 @@
             <div>{{ product.name }}</div>
           </div>
         </td>
-        <td>
-          {{
-            new Intl.NumberFormat('de-DE', {
-              style: 'currency',
-              currency: 'VND',
-              minimumFractionDigits: 0
-            }).format(product.price)
-          }}
-        </td>
+        <td>{{product.price | toVND}}</td>
         <td>{{ product.quantity }}</td>
         <td>
-          <span v-if="product.isAvailable" class="greenColor">Còn hàng</span>
+          <span v-if="product.quantity !== 0" class="greenColor">Còn hàng</span>
           <span v-else class="redColor">Hết hàng</span>
         </td>
       </tr>
@@ -69,35 +60,30 @@ export default {
           image: 'https://cdn.cellphones.com.vn/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/p/h/photo_2020-10-13_22-12-24.jpg_1_2.png',
           price: 32990000,
           quantity: 566,
-          isAvailable: true
         },
         {
           name: 'iPhone 12 Chính Hãng (VN/A)',
           image: '',
           price: 21790000,
           quantity: 123,
-          isAvailable: true
         },
         {
           name: 'iPhone 11 Chính hãng',
           image: 'https://cdn.cellphones.com.vn/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/_/0/_0004_layer_5.jpg',
           price: 16690000,
           quantity: 0,
-          isAvailable: false
         },
         {
           name: 'Apple iPhone XR 64GB Chính hãng(VN/A)',
           image: 'https://cdn.cellphones.com.vn/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-xr_5_.jpg',
           price: 12190000,
           quantity: 1023,
-          isAvailable: true
         },
         {
           name: 'iPhone 11 Pro Max Chính hãng(VN/A)',
           image: '',
           price: 26500000,
           quantity: 45,
-          isAvailable: true
         }
       ],
       productData: [
@@ -106,35 +92,30 @@ export default {
           image: 'https://cdn.cellphones.com.vn/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/p/h/photo_2020-10-13_22-12-24.jpg_1_2.png',
           price: 32990000,
           quantity: 566,
-          isAvailable: true
         },
         {
           name: 'iPhone 12 Chính Hãng (VN/A)',
           image: '',
           price: 21790000,
           quantity: 123,
-          isAvailable: true
         },
         {
           name: 'iPhone 11 Chính hãng',
           image: 'https://cdn.cellphones.com.vn/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/_/0/_0004_layer_5.jpg',
           price: 16690000,
           quantity: 0,
-          isAvailable: false
         },
         {
           name: 'Apple iPhone XR 64GB Chính hãng(VN/A)',
           image: 'https://cdn.cellphones.com.vn/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-xr_5_.jpg',
           price: 12190000,
           quantity: 1023,
-          isAvailable: true
         },
         {
           name: 'iPhone 11 Pro Max Chính hãng(VN/A)',
           image: '',
           price: 26500000,
           quantity: 45,
-          isAvailable: true
         }
       ],
       isClose: false
@@ -163,7 +144,12 @@ export default {
         this.productData = this.products
       }
     }
-  }
+  },
+  filters: {
+    toVND (value) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    },
+  },
 }
 </script>
 <style scoped lang="scss">
@@ -171,79 +157,79 @@ export default {
   width: 50%;
   margin: 0 auto;
 
-.search-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  margin-bottom: 20px;
+  .search-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    margin-bottom: 20px;
 
-.search-box {
-  position: relative;
+  .search-box {
+    position: relative;
 
-input {
-  padding: 10px 30px 10px 40px;
-  width: 250px;
-  border: 1px solid black;
-}
-input:focus {
-  outline-color: #0080dd;
-}
-input:hover {
-  border-color: #0080dd;
-}
-.search-icon {
-  position: absolute;
-  left: 10px;
-  top: 8px;
+  input {
+    padding: 10px 30px 10px 40px;
+    width: 250px;
+    border: 1px solid black;
+  }
+  input:focus {
+    outline-color: #0080dd;
+  }
+  input:hover {
+    border-color: #0080dd;
+  }
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 8px;
 
-.search {
-  left: 0;
-  position: relative;
-  margin: 0 auto;
-  text-align: center;
+    .search {
+      left: 0;
+      position: relative;
+      margin: 0 auto;
+      text-align: center;
 
-.search-circle {
-  left: 0;
-  width: 15px;
-  height: 15px;
-  border: 1px solid #333;
-  border-radius: 50%;
-}
-.search-rectangle {
-  position: absolute;
-  right: -5px;
-  bottom: -2px;
-  width: 7px;
-  transform: rotate(45deg);
-  border: 1px solid #333;
-}
-}
-}
+      .search-circle {
+        left: 0;
+        width: 15px;
+        height: 15px;
+        border: 1px solid #333;
+        border-radius: 50%;
+      }
+      .search-rectangle {
+        position: absolute;
+        right: -5px;
+        bottom: -2px;
+        width: 7px;
+        transform: rotate(45deg);
+        border: 1px solid #333;
+      }
+    }
+  }
 
-.close-icon {
-  position: absolute;
-  right: 20px;
-  top: 18px;
-  cursor: pointer;
+  .close-icon {
+      position: absolute;
+      right: 20px;
+      top: 18px;
+      cursor: pointer;
 
-.close {
-  position: relative;
+    .close {
+      position: relative;
 
-.right {
-  position: absolute;
-  width: 10px;
-  border: 1px solid black;
-  transform: rotate(45deg);
-}
-.left {
-  position: absolute;
-  width: 10px;
-  border: 1px solid black;
-  transform: rotate(135deg);
-}
-}
-}
-}
+      .right {
+        position: absolute;
+        width: 10px;
+        border: 1px solid black;
+        transform: rotate(45deg);
+      }
+        .left {
+          position: absolute;
+          width: 10px;
+          border: 1px solid black;
+          transform: rotate(135deg);
+        }
+      }
+    }
+  }
 }
 
 table, th, td {

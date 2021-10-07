@@ -1,11 +1,11 @@
 <template>
   <el-container>
     <el-aside>
-      <el-row class="tac">
+      <el-row>
         <el-menu
             default-active="2"
             class="el-menu-vertical"
-            background-color="#545c64"
+            background-color="#001529"
             text-color="#fff"
             active-text-color="#ffd04b">
           <el-menu-item index="1">
@@ -48,121 +48,100 @@
     </el-aside>
     <el-container>
       <el-header>
-        <el-row>
-          <el-col :span="21">
-            <slot name="title-header"></slot>
-          </el-col>
-          <el-col :span="3">
-            <el-menu :default-active="active"
-                     class="el-menu-navbar"
-                     mode="horizontal"
-                     background-color= "#E9EEF3"
-                     text-color="black"
-                     active-text-color="black">
-              <el-menu-item index="1">
-                <el-badge :value="12" class="item">
-                  <i class="el-icon-bell"></i>
-                </el-badge>
-              </el-menu-item>
-
-              <el-menu-item index="2">
-                <el-dropdown>
-                  <span class="el-dropdown-link">
-                  <div class="block"><el-avatar :src="avatar" :size="size" ></el-avatar></div>
-
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>Thông tin tài khoản</el-dropdown-item>
-                    <el-dropdown-item>Đổi mật khẩu</el-dropdown-item>
-                    <el-dropdown-item>Cấu hình</el-dropdown-item>
-                    <el-dropdown-item divided>Đăng xuất</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </el-menu-item>
-            </el-menu>
-          </el-col>
-        </el-row>
-
+        <div class="header">
+          <slot name="contentHeader">Slot</slot>
+        </div>
+        <div class="infoHeader">
+          <el-badge :value="12" class="item">
+            <i class="el-icon-bell"></i>
+          </el-badge>
+        </div>
+        <div class="dropHeader">
+          <el-dropdown @command="handleCommand">
+            <span class="el-dropdown-link">
+              <img :src="url" alt="">
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="a">Thông tin tài khoản</el-dropdown-item>
+              <el-dropdown-item command="b">Đổi mật khẩu</el-dropdown-item>
+              <el-dropdown-item command="c">Cấu hình</el-dropdown-item>
+              <el-dropdown-item command="e" divided>Đăng xuất</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
       </el-header>
       <el-main>
-        <slot name="main-content"></slot>
+        <slot name="contentMain"></slot>
       </el-main>
-      <el-footer>&copy; Phan Dương Thùy</el-footer>
     </el-container>
   </el-container>
 </template>
 
 <script>
 export default {
-  name: 'baselayout',
+  name: "BaseLayout",
   data(){
-    return {
-      active: '',
-      size: 'medium',
-      avatar: "https://scontent.fhph1-2.fna.fbcdn.net/v/t1.6435-9/125988800_1074119919701221_4925611912916530605_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=vfPUdepHeJUAX9f4Hvt&_nc_ht=scontent.fhph1-2.fna&oh=7134b90b2c8642f21439abcda665f70c&oe=618383B0",
+    return{
+      url : "https://cdnstatic.baotintuc.vn/web_images/logo-share-02.jpg"
     }
   },
+  methods: {
+    handleCommand(command) {
+      this.$message('click on item ' + command);
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
-.el-header{
-  background-color: #E9EEF3;
-  text-align: left;
-  line-height: 30px;
-}
-.el-footer {
-  background-color: #E9EEF3;
+.el-header {
+  background-color: #B3C0D1;
+  color: #333;
   text-align: left;
   line-height: 60px;
+  display: flex;
+  .header{
+    width: 50%;
+  }
+  .infoHeader{
+    width: 40%;
+    text-align: right;
+  }
+  .dropHeader{
+    width: 10%;
+    text-align: center;
+    .el-dropdown{
+      height: 60px;
+      span{
+        img{
+          width: 40px;
+          border-radius: 50%;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
 }
-
 .el-aside {
-  width: 230px;
-  background-color: #545c64;
+  background-color: #001529;
   color: #333;
   text-align: left;
-  height: 1000px;
+  line-height: 200px;
+  height: 700px;
 }
-
 .el-main {
+  background-color: #E9EEF3;
   color: #333;
-  text-align: center;
+  text-align: left;
 }
-
 body > .el-container {
-
   margin-bottom: 40px;
+}
 .el-container:nth-child(5) .el-aside,
 .el-container:nth-child(6) .el-aside {
   line-height: 260px;
 }
-
 .el-container:nth-child(7) .el-aside {
   line-height: 320px;
-}
-.el-menu-vertical{
-
-.el-submenu {
-  text-align: left;
-}
-}
-.el-header {
-.el-row {
-  padding-top: 5px;
-.el-col {
-.el-menu,.el-menu--horizontal {
-.el-menu--horizontal>.el-menu-item {
-}
-.el-dropdown {
-.el-dropdown-menu {
-  font-size: 14px;
-}
-}
-}
-}
-
-}
-}
 }
 </style>

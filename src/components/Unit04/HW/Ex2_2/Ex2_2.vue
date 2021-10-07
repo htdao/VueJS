@@ -16,11 +16,7 @@
             <img :src="item.image" alt="">
             <a href="#">{{item.name}}</a>
           </td>
-          <td>{{ new Intl.NumberFormat('de-DE', {
-            style: 'currency',
-            currency: 'VND',
-            minimumFractionDigits: 0
-          }).format(item.price) }}</td>
+          <td>{{item.price | toVND}}</td>
           <td>{{item.quantity}}</td>
           <td>
             <span v-if="item.isAvailable" style="color: #96e2c2">Còn hàng</span>
@@ -42,11 +38,7 @@
             </td>
             <td>
               <p><b>{{list.name}}</b></p>
-              <p>{{ new Intl.NumberFormat('de-DE', {
-                style: 'currency',
-                currency: 'VND',
-                minimumFractionDigits: 0
-              }).format(list.price)}}</p>
+              <p>{{ list.price | toVND }}</p>
             </td>
             <td>
               <input type="number" @change="changeCart(index)" v-model="list.soluong">
@@ -56,13 +48,10 @@
             </td>
           </tr>
         </table>
+        <p class="textCenter" v-if="listCart.length===0">Không có sản phẩm nào được thêm vào giỏ</p>
       </div>
       <div class="total">
-        <b>Tổng tiền : {{ new Intl.NumberFormat('de-DE', {
-          style: 'currency',
-          currency: 'VND',
-          minimumFractionDigits: 0
-        }).format(total) }}</b>
+        <b>Tổng tiền : {{total|toVND}}</b>
       </div>
     </div>
   </div>
@@ -86,7 +75,7 @@ export default {
         },
         {
           id:2,
-          name: 'iPhone 12 Chính Hãng (VN/A)',
+          name: 'iPhone 12 Chính Hãng (VN/A) aaaaaaaaaaaaaaa',
           image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqwXfjwuJIi7teNG13soue7Rgc0qofzaMMJcLczgssD2AXBbtjmvavqDriZ0Rk6xQ7k1s&usqp=CAU',
           price: 21790000,
           quantity: 123,
@@ -168,6 +157,12 @@ export default {
       }
     }
   },
+
+  filters: {
+    toVND (value) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    },
+  },
 }
 </script>
 
@@ -222,7 +217,7 @@ export default {
     }
   }
   .cart{
-    background: #0000000d;
+    background: white;
     border: 1px solid #0000000d;
     width: 590px;
     text-align: left;
@@ -232,6 +227,10 @@ export default {
       margin-left: 8px;
     }
     .addProduct{
+
+      .textCenter{
+        text-align: center;
+      }
       height: 400px;
       table{
         padding-left: 5px;
