@@ -5,29 +5,20 @@
         <img :src="url">
         <div class="login-form">
           <div class="box-input">
-            <input type="text" placeholder="Email" v-model="email" :class="{ error_format: message }">
-            <div class="error-message" v-if="message">
-              <i class="el-icon-warning"></i>
-              {{ messageErr }}
-            </div>
+            <input type="text" placeholder="Email" v-model="email" :class="{ error: checkEmail }">
+            <div class="error-message" v-if="checkEmail"><i class="el-icon-warning"></i>{{ messageEmail }}</div>
           </div>
           <div class="box-input">
-            <input type="password" placeholder="Mật khẩu" v-model="password" :class="{ error_format: errorPassword }">
-            <div class="error-message" v-if="errorPassword">
-              <i class="el-icon-warning"></i>
-              {{ errorPasswordMessage }}
-            </div>
+            <input type="password" placeholder="Mật khẩu" v-model="password" :class="{ error: checkPassword }">
+            <div class="error-message" v-if="checkPassword"><i class="el-icon-warning"></i>{{ messagePassword }}</div>
           </div>
-
           <div class="forget">
             <button @click="function () {flag = false}">Quên mật khẩu?</button>
             <div></div>
           </div>
-
           <button class="btn-login" @click="validate(0)">ĐĂNG NHẬP</button>
         </div>
       </div>
-
       <div class="box-1" v-else>
         <div class="title">LẤY LẠI MẬT KHẨU</div>
         <div class="note">
@@ -35,17 +26,13 @@
         </div>
         <div class="login-form">
           <div class="box-input">
-            <input placeholder="Email" v-model="email" :class="{ error_format: message }">
-            <div class="error-message" v-if="message">
-              <i class="el-icon-warning"></i>
-              {{ messageErr }}
-            </div>
+            <input placeholder="Email" v-model="email" :class="{ error: checkEmail }">
+            <div class="error-message" v-if="checkEmail"><i class="el-icon-warning"></i>{{ messageEmail }}</div>
           </div>
           <button class="btn-login" @click="validate(1)">GỬI EMAIL</button>
         </div>
         <div class="return-form">
-          <button @click="function () {flag = true}">
-            <i class="el-icon-back"></i>
+          <button @click="function () {flag = true}"><i class="el-icon-back"></i>
             Trở về trang đăng nhập
           </button>
         </div>
@@ -59,15 +46,36 @@ export default {
   name: "Login",
   data() {
     return {
-      url: 'http://fms.flixgo.jp/static/media/logo-login.2d516aef.png',
       email: '',
       password: '',
+      
+      url: 'http://fms.flixgo.jp/static/media/logo-login.2d516aef.png',
       flag: true,
-      message: false,
-      errorPassword: false,
-      messageErr: '',
-      errorPasswordMessage: ''
+      
+      checkEmail: false,
+      messageEmail: '',
+      
+      checkPassword: false,
+      messagePassword: ''
     }
+  },
+  watch: {
+    email(value) {
+      if (value !== '') {
+        this.checkEmail = false
+      }
+    },
+    password(value) {
+      if (value !== '') {
+        this.checkPassword = false
+      }
+    }
+  },
+  computed:{
+    
+  },
+  filter: {
+    
   },
   methods: {
     validateEmail: function (email) {
@@ -76,54 +84,42 @@ export default {
     },
     sendMail() {
       this.flag = true
-      this.$message({
+      this.$checkEmail({
         message: 'Gửi email thành công.',
         type: 'success'
       });
     },
     validate(flag) {
-      let bool = true;
+      let check = true;
       (flag === 1) ? this.password = 1234567 : ''
       if (this.email === '') {
-        this.message = true
-        this.messageErr = 'Email không được để trống'
-        bool = false
+        this.checkEmail = true
+        this.messageEmail = 'Email không được để trống'
+        check = false
       } else {
         if (!this.validateEmail(this.email)) {
-          this.message = true
-          this.messageErr = 'Email sai định dạng, vui lòng nhập lại'
-          bool = false
+          this.checkEmail = true
+          this.messageEmail = 'Email sai định dạng, vui lòng nhập lại'
+          check = false
         }
       }
       if (this.password === '') {
-        this.errorPassword = true
-        this.errorPasswordMessage = 'Mật khẩu không được để trống'
-        bool = false
+        this.checkPassword = true
+        this.messagePassword = 'Mật khẩu không được để trống'
+        check = false
       } else {
         if (this.password.length < 7) {
-          this.errorPassword = true
-          this.errorPasswordMessage = 'Mật khẩu phải lớn hơn 6 ký tự'
-          bool = false
+          this.checkPassword = true
+          this.messagePassword = 'Mật khẩu phải lớn hơn 6 ký tự'
+          check = false
         }
       }
-      if (bool) {
+      if (check) {
         (flag === 0) ? this.$router.push({ path: '/dashboard' }) : this.sendMail()
         this.email = this.password = ''
       }
     },
   },
-  watch: {
-    email(value) {
-      if (value !== '') {
-        this.message = false
-      }
-    },
-    password(value) {
-      if (value !== '') {
-        this.errorPassword = false
-      }
-    }
-  }
 }
 </script>
 
@@ -171,7 +167,7 @@ export default {
               margin-right: 4px;
             }
           }
-          .error_format {
+          .error {
             border: 1px solid red;
           }
         }
