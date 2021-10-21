@@ -6,11 +6,11 @@
 <!--      <router-link :to="`/users/${userId}`">User</router-link>-->
 <!--    </div>-->
 <!--    <router-view/>-->
-    <Todo/>
+    <ListProduct/>
   </div>
 </template>
 <script>
-import Todo from "./components/Unit07/Todo.vue";
+import ListProduct from "./components/Unit07/HW/Ex7_1/ListProduct.vue";
 export default {
   data() {
     return {
@@ -19,7 +19,7 @@ export default {
   },
 
   components:{
-    Todo
+    ListProduct
   }
 }
 </script>
