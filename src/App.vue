@@ -6,11 +6,13 @@
 <!--      <router-link :to="`/users/${userId}`">User</router-link>-->
 <!--    </div>-->
 <!--    <router-view/>-->
-    <ListProduct/>
+<!--    <ListProduct/>-->
+    <Exercise/>
   </div>
 </template>
 <script>
-import ListProduct from "./components/Unit07/HW/Ex7_1/ListProduct.vue";
+import Exercise from "./components/Unit07/HW/Ex7_2/Exercise.vue";
+// import ListProduct from "./components/Unit07/HW/Ex7_1/ListProduct.vue";
 export default {
   data() {
     return {
@@ -19,7 +21,8 @@ export default {
   },
 
   components:{
-    ListProduct
+    // ListProduct
+    Exercise
   }
 }
 </script>

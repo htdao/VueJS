@@ -54,7 +54,16 @@ const store = new Vuex.Store({
             }
         ],
         cartProducts: [],
-        total: 0
+        total: 0,
+
+        //Unit07 - Ex7.2
+        listProducts: [],
+        product: {},
+        nameErrorMsg: '',
+        priceErrorMsg: '',
+        quantityErrorMsg: '',
+        currentPage: 1,
+        perPage: 5,
     },
     getters: {
         doneTodos: state => {
@@ -119,6 +128,46 @@ const store = new Vuex.Store({
                 }
             })
         },
+
+        //Unit07 - EX7.2
+        createProduct (state, value) {
+            state.listProducts.push(value)
+        },
+        addProduct(state, value){
+            let check = 1;
+            if (value.name === ''){
+                state.nameErrorMsg = 'Tên không được để trống'
+                check = 0;
+            }
+            if (value.price === ''){
+                state.priceErrorMsg = 'Giá không được để trống'
+                check = 0;
+            }
+            if (value.quantity === ''){
+                state.quantityErrorMsg = 'Số lượng không được để trống'
+                check = 0;
+            }
+            if (check){
+                let today = new Date();
+                value.id = 'SP'+today.getDate()+today.getTime();
+                state.listProducts.push(value);
+            }
+        },
+        editProduct(state, value){
+            state.product = value;
+        },
+        updateProduct(state, value){
+            state.listProducts.forEach(function (val){
+                if(val.id === value.id){
+                    val.name = value.name;
+                    val.price = value.price;
+                    val.quantity = value.quantity;
+                }
+            })
+        },
+        deleteProduct(state, value){
+            state.listProducts.splice(value, 1)
+        }
 
     }
 })

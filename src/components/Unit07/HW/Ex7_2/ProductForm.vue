@@ -6,7 +6,6 @@
       <input
           type="text"
           placeholder="Nhập tên sản phẩm"
-          :class="{hasError: nameErrorMsg.length > 0}"
           v-model="name"
       >
       <div class="errorMsg">
@@ -18,7 +17,6 @@
       <input
           type="number"
           placeholder="Nhập đơn giá sản phẩm"
-          :class="{hasError: priceErrorMsg.length > 0}"
           v-model="price"
       >
       <div class="errorMsg">
@@ -30,7 +28,6 @@
       <input
           type="number"
           placeholder="Nhập số lượng sản phẩm"
-          :class="{hasError: quantityErrorMsg.length > 0}"
           v-model="quantity"
       >
       <div class="errorMsg">
@@ -38,91 +35,65 @@
       </div>
     </div>
     <div class="formActions">
-      <button class="saveButton" @click="saveProduct">
-        {{Object.keys(this.product).length === 0 ? 'Tạo mới' : 'Cập nhật'}}
-      </button>
+      <button class="saveButton"  @click="saveProduct" v-if="flag === 0">Tạo mới</button>
+      <button class="saveButton" @click="onUpdateProduct(product)" v-else>Cập nhật</button>
       <button class="defaultButton" @click="clearData">Hủy</button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
 export default {
   name: 'ProductForm',
-  props: ['product'],
   data () {
     return {
       name: '',
       price: '',
       quantity: '',
-      nameErrorMsg: '',
-      priceErrorMsg: '',
-      quantityErrorMsg: '',
+      flag: 0,
     }
   },
+  computed: {
+    ...mapState([
+      "product",
+      "nameErrorMsg",
+      "priceErrorMsg",
+      "quantityErrorMsg",
+    ])
+  },
   watch: {
-    name () {
-      this.nameErrorMsg = ''
-    },
-    price () {
-      this.priceErrorMsg = ''
-    },
-    quantity () {
-      this.quantityErrorMsg = ''
-    },
-    product () {
-      this.name = this.product.name
-      this.price = this.product.price
-      this.quantity = this.product.quantity
+    product(){
+      if (this.product !== ''){
+          this.name = this.product.name
+          this.price = this.product.price
+          this.quantity = this.product.quantity
+          this.flag = 1;
+      }
     }
   },
   methods: {
+    ...mapMutations([
+        "addProduct",
+        "editProduct",
+        "updateProduct"
+    ]),
     saveProduct () {
-      if (this.isDataValidated()) {
-        if (Object.keys(this.product).length === 0) {
-          this.$emit('onCreateProduct', {
-            id: `SP${new Date().getTime()}`,
-            name: this.name,
-            price: parseInt(this.price),
-            quantity: parseInt(this.quantity),
-          })
-        } else {
-          this.$emit('onUpdateProduct', {
-            id: this.product.id,
-            name: this.name,
-            price: parseInt(this.price),
-            quantity: parseInt(this.quantity),
-          })
-        }
-        this.clearData()
-      }
+      let product = [];
+      product.name = this.name;
+      product.price = this.price;
+      product.quantity = this.quantity;
+      this.addProduct(product)
+      this.clearData()
+    },
+    onUpdateProduct(value){
+      this.updateProduct(value)
     },
     clearData () {
       this.name = ''
       this.price = ''
       this.quantity = ''
-      this.$emit('onClear')
     },
-    isDataValidated () {
-      let result = true
-
-      if (!this.name) {
-        result = false
-        this.nameErrorMsg = 'Tên sản phẩm không được để trống'
-      }
-
-      if (!this.price) {
-        result = false
-        this.priceErrorMsg = 'Giá sản phẩm không được để trống'
-      }
-
-      if (!this.quantity) {
-        result = false
-        this.quantityErrorMsg = 'Số lượng sản phẩm không được để trống'
-      }
-
-      return result
-    }
   }
 }
 </script>
@@ -158,6 +129,7 @@ $colorOrange: #f2994a;
     .inputLabel {
       font-weight: bold;
       margin-bottom: 8px;
+      text-align: left;
 
       span {
         color: $colorRed;

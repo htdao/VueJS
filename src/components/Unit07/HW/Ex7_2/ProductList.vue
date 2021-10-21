@@ -9,10 +9,10 @@
         <th>Trạng thái</th>
         <th>Hành động</th>
       </tr>
-      <tr v-if="products.length === 0">
+      <tr v-if="listProducts.length === 0">
         <td colspan="6" class="textCenter">Không có dữ liệu</td>
       </tr>
-      <tr v-for="(product, index) in getPaginationProductions" :key="product.id">
+      <tr v-for="(product, index) in listProducts" :key="product.id">
         <td>{{product.id}}</td>
         <td><span class="textMain">{{product.name}}</span></td>
         <td>{{formatPrice(product.price)}}</td>
@@ -22,84 +22,58 @@
           <span v-else class="textRed">Hết hàng</span>
         </td>
         <td>
-          <button class="editButton" @click="editProduct(product)">Sửa</button>
-          <button class="deleteButton" @click="deleteProduct(index)">Xóa</button>
+          <button class="editButton" @click="onEditProduct(product)">Sửa</button>
+          <button class="deleteButton" @click="onDeleteProduct(index)">Xóa</button>
         </td>
       </tr>
     </table>
-    <div class="paginationWrap">
-      <div class="paginationDetail">
-        {{
-          total === 0 ? 'Hiển thị 0 - 0 trên tổng 0 (0 trang)' :
-              `Hiển thị ${from} - ${to} trên tổng ${total} (${lastPage} trang)`
-        }}
-      </div>
-      <div>
-        <button class="paginationButton" @click="goPrePage" :class="{isButtonDisabled: isGoPrePageDisabled}">
-          <img src="../../assets/back.svg" alt="">
-        </button>
-        <button class="paginationButton" @click="goNextPage" :class="{isButtonDisabled: isGoNextPageDisabled}">
-          <img src="../../assets/next.svg" alt="">
-        </button>
-      </div>
-    </div>
+<!--    <div class="paginationWrap">-->
+<!--      <div class="paginationDetail">-->
+<!--        {{-->
+<!--          this.total === 0 ? 'Hiển thị 0 - 0 trên tổng 0 (0 trang)' :-->
+<!--              `Hiển thị ${ this.from} - ${to} trên tổng ${total} (${lastPage} trang)`-->
+<!--        }}-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <el-button class="paginationButton" @click="goPrePage" icon="el-icon-arrow-left" :class="{isButtonDisabled: isGoPrePageDisabled}"></el-button>-->
+<!--        <el-button class="paginationButton" @click="goNextPage" icon="el-icon-arrow-right" :class="{isButtonDisabled: isGoNextPageDisabled}"></el-button>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
 export default {
   name: 'ProductList',
-  props: ['products'],
   data () {
     return {
-      currentPage: 1,
-      perPage: 5
     }
   },
   computed: {
-    total () {
-      return this.products.length
-    },
-    from () {
-      return ((this.currentPage - 1) * this.perPage) + 1
-    },
-    to () {
-      let toItem = this.currentPage * this.perPage
-      return toItem < this.products.length ? toItem : this.products.length
-    },
-    lastPage () {
-      return Math.ceil(this.products.length / this.perPage);
-    },
-    isGoPrePageDisabled () {
-      return this.currentPage <= 1 || this.products.length === 0
-    },
-    isGoNextPageDisabled () {
-      return this.currentPage >= this.lastPage || this.products.length === 0
-    },
-    getPaginationProductions () {
-      return this.products.slice((this.currentPage - 1) * this.perPage, this.currentPage * this.perPage);
-    }
+    ...mapState([
+        "listProducts",
+        "perPage",
+        "currentPage"
+    ]),
+
   },
   methods: {
+    ...mapMutations([
+        "editProduct",
+        "deleteProduct"
+    ]),
+    onEditProduct(value){
+      this.editProduct(value)
+    },
+    onDeleteProduct(value){
+      this.deleteProduct((value))
+    },
+
     formatPrice (price) {
       return price.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + ' đ'
     },
-    editProduct (product) {
-      this.$emit('onEditProduct', product)
-    },
-    deleteProduct (index) {
-      this.$emit('onDeleteProduct', index)
-    },
-    goNextPage () {
-      if (this.currentPage < this.lastPage) {
-        this.currentPage += 1
-      }
-    },
-    goPrePage () {
-      if (this.currentPage > 1) {
-        this.currentPage -= 1
-      }
-    }
+
   }
 }
 </script>
