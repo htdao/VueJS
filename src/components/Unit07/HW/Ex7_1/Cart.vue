@@ -18,6 +18,7 @@
             class="quantityChangeInput"
             type="number"
             v-model="cartProducts[index].quantity"
+            @change="changeQuantity()"
         >
         <button class="removeFromCartButton" @click="removeProduct(product)">Xoá</button>
       </div>
@@ -46,7 +47,8 @@ export default {
   },
   methods: {
     ...mapMutations([
-        "removeFromCart"
+        "removeFromCart",
+        "changeQuantity"
     ]),
     formatPrice (price) {
       return price.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + ' đ'
@@ -60,6 +62,10 @@ export default {
     removeProduct (value) {
       this.removeFromCart(value)
     },
+
+    changeQuantity(){
+      this.changeQuantity()
+    }
   }
 }
 </script>

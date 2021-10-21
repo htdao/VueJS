@@ -129,6 +129,13 @@ const store = new Vuex.Store({
             })
         },
 
+        changeQuantity(state){
+            state.cartProducts.forEach(function (value){
+                state.total = 0;
+                state.total += value.price*value.quantity
+            })
+        },
+
         //Unit07 - EX7.2
         createProduct (state, value) {
             state.listProducts.push(value)
@@ -167,7 +174,8 @@ const store = new Vuex.Store({
         },
         deleteProduct(state, value){
             state.listProducts.splice(value, 1)
-        }
+        },
+
 
     }
 })
