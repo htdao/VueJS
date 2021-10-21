@@ -5,10 +5,12 @@
 <!--      <router-link to="/about">About</router-link> |-->
 <!--      <router-link :to="`/users/${userId}`">User</router-link>-->
 <!--    </div>-->
-    <router-view/>
+<!--    <router-view/>-->
+    <Todo/>
   </div>
 </template>
 <script>
+import Todo from "./components/Unit07/Todo.vue";
 export default {
   data() {
     return {
@@ -17,6 +19,7 @@ export default {
   },
 
   components:{
+    Todo
   }
 }
 </script>

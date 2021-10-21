@@ -10,6 +10,11 @@ const routes = [
     name: 'Home',
     component: Home
   },
+  // {
+  //   path: '/test',
+  //   name: 'Test',
+  //   component: () => import(/* webpackChunkName: "about" */ '../components/Unit03/Ex01.vue')
+  // },
   {
     path: '/about',
     name: 'About',
@@ -95,6 +100,15 @@ const routes = [
     name: 'Settings',
     component: () => import('../components/Unit05/HW/Settings.vue'),
   },
+
+    //Ex05
+  {
+    path: '/homepage',
+    name: 'HomePage',
+    component: () => import('../components/Ex/Ex05/HomePage.vue'),
+  },
+
+
 ]
 
 const router = new VueRouter({

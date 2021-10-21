@@ -2,31 +2,41 @@
   <div class="loginWrap">
     <div class="inputWrap">
       <div class="inputLabel">Tên đăng nhập</div>
-      <input type="text">
+      <input type="text" v-model="name">
       <p class="error"></p>
     </div>
 
     <div class="inputWrap">
       <div class="inputLabel">Mật khẩu</div>
-      <input type="text" v-model="password">
+      <input type="text">
     </div>
 
-    <button class="loginButton" @click="login()">Đăng nhập</button>
+    <button class="loginButton" @click="changeName()">Đăng nhập</button>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
+
   name: "inputWrap",
   data(){
     return {
-      password: '',
+      name: '',
     }
   },
   methods: {
-    login: function (){
-        this.$emit('onLogin', this.password)
+    ...mapMutations([
+      'updateUsername'
+    ]),
+    changeName(){
+      this.updateUsername(this.name)
     }
+  },
+  computed: {
+    ...mapState([
+      'username'
+    ])
   }
 }
 </script>
