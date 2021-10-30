@@ -5,14 +5,16 @@
 <!--      <router-link to="/about">About</router-link> |-->
 <!--      <router-link :to="`/users/${userId}`">User</router-link>-->
 <!--    </div>-->
-<!--    <router-view/>-->
-    <ListProduct/>
+    <router-view/>
+<!--    <ListProduct/>-->
 <!--    <Exercise/>-->
+<!--    <Todo/>-->
   </div>
 </template>
 <script>
 // import Exercise from "./components/Unit07/HW/Ex7_2/Exercise.vue";
-import ListProduct from "./components/Unit07/HW/Ex7_1/ListProduct.vue";
+// import ListProduct from "./components/Unit07/HW/Ex7_1/ListProduct.vue";
+// import Todo from "./components/Unit04/HW/Ex3_1/Todo"
 export default {
   data() {
     return {
@@ -21,7 +23,8 @@ export default {
   },
 
   components:{
-    ListProduct
+    // Todo
+    // ListProduct
     // Exercise
   }
 }

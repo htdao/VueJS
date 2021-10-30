@@ -4,13 +4,15 @@
       <h1>Todo App</h1>
       <input type="text" placeholder="Nhập công việc và nhấn enter để thêm"
              v-model="input" @keypress.enter="addItem()">
-      <TodoItem :todoItem="data"/>
+      <TodoItem :todoItem="todoList"/>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import TodoItem from './TodoItem'
+import { mapState, mapMutations } from 'vuex'
 export default {
   name: "Todo",
   components: {
@@ -19,17 +21,46 @@ export default {
   data() {
     return {
       input: '',
-      data: ''
+      data: '',
     }
   },
+  mounted() {
+    this.getTodo()
+  },
+  computed:{
+    ...mapState('home', [
+      'todoList'
+    ]),
+  },
   methods: {
+    ...mapMutations('home', [
+      // Mutation muốn gọi đến
+        "updateTodo"
+    ]),
+    getTodo(){
+      axios({
+        method: 'get',
+        url: 'http://vuecourse.zent.edu.vn/api/todos',
+      }).then((response) => {
+        this.updateTodo(response.data.data.data)
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
     addItem() {
-      let item = {
-        isActive: 0,
-        work: this.input
-      }
-      this.data = item
-      this.input = ''
+      axios({
+        method: 'post',
+        url: 'http://vuecourse.zent.edu.vn/api/todos',
+        data: {
+          title: this.input
+        }
+      }).then(() => {
+        this.getTodo()
+        this.input = ''
+      }).catch((error) => {
+        // handle error
+        console.log(error);
+      })
     }
   }
 }

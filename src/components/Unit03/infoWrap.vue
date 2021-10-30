@@ -20,20 +20,40 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { mapGetters } from 'vuex'
+import axios from 'axios'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   name: "infoWrap",
+  mounted() {
+    axios({
+      method: 'get',
+      url: 'http://vuecourse.zent.edu.vn/api/todos',
+    }).then((response) => {
+      this.todoList = response.data.data.data
+      console.log(response.data.data.data);
+    }).catch((error) => {
+      // handle error
+      console.log(error);
+    });
+  },
   computed: {
-    ...mapState([
-      'username',
-      'age'
+    ...mapState('home', [
+      // State muốn gọi đến
+        'username',
+        'age',
+        'todoList'
     ]),
-    ...mapGetters([
+    ...mapGetters('home', [
+      // Getter muốn gọi đến
       'doneTodos',
       'getTodoById',
       'doneTodoCount'
     ])
+  },
+  methods: {
+    ...mapMutations('home', [
+      // Mutation muốn gọi đến
+    ]),
   }
 }
 </script>

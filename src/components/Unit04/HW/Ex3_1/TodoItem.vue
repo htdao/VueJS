@@ -1,38 +1,73 @@
 <template>
   <div class="todo-container">
-    <div class="todo-item" v-for="(value, index) in listWork" :key="index">
+    <div class="todo-item" v-for="(value) in todoList" :key="value.id">
       <div class="todo-info">
-        <input type="checkbox" @click="handleTick(index, $event)" :checked="value.isActive">
-        <span :class="{ del: value.isActive }">{{ value.work }}</span>
+        <input type="checkbox" @click="handleTick(value)" :checked="value.is_complete">
+        <span :class="{ del: value.is_complete }">{{ value.title }}</span>
       </div>
-      <button @click="handleDeleteItem(index)" v-if="value.isActive">Xóa</button>
+      <button @click="handleDeleteItem(value.id)" v-if="value.is_complete">Xóa</button>
     </div>
-    <div class="todo-null" v-if="listWork.length === 0">
+    <div class="todo-null" v-if="todoList.length === 0">
       Chưa có task nào được thêm
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
+import axios from "axios";
 export default {
   name: "TodoItem",
-  props: ['todoItem'],
   data() {
     return {
-      listWork: []
+      listWork: [],
+      title: ''
     }
   },
+  computed:{
+    ...mapState('home', [
+      // State muốn gọi đến
+        "todoList"
+    ]),
+  },
   methods: {
+    ...mapMutations('home', [
+      // Mutation muốn gọi đến
+        "updateTodo"
+    ]),
     handleDeleteItem(index) {
-      this.listWork.splice(index,1)
+      axios({
+        method: 'delete',
+        url: 'http://vuecourse.zent.edu.vn/api/todos/'+index,
+      }).then(() => {
+        // handle success
+        this.getTodo()
+      }).catch((error) => {
+        // handle error
+        console.log(error);
+      })
     },
-    handleTick(index, event){
-      if (event.target.checked) {
-        this.listWork[index].isActive = 1
-      } else {
-        this.listWork[index].isActive = 0
-      }
-    }
+    handleTick(value){
+      axios({
+        method: 'put',
+        url: 'http://vuecourse.zent.edu.vn/api/todos/'+value.id,
+        data:{
+          is_complete: value.is_complete
+        }
+      }).then(() => {
+        this.getTodo()
+      })
+    },
+    getTodo(){
+      axios({
+        method: 'get',
+        url: 'http://vuecourse.zent.edu.vn/api/todos',
+      }).then((response) => {
+        this.updateTodo(response.data.data.data)
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
   },
   watch: {
     todoItem (value) {
