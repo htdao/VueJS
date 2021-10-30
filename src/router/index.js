@@ -70,11 +70,11 @@ const routes = [
     name: 'Statistic',
     component: () => import('../components/Unit05/HW/Statistics.vue'),
   },
-  {
-    path: '/product',
-    name: 'Product',
-    component: () => import('../components/Unit05/HW/Products.vue'),
-  },
+  // {
+  //   path: '/product',
+  //   name: 'Product',
+  //   component: () => import('../components/Unit05/HW/Products.vue'),
+  // },
   {
     path: '/order',
     name: 'Order',
@@ -106,6 +106,13 @@ const routes = [
     path: '/homepage',
     name: 'HomePage',
     component: () => import('../components/Ex/Ex05/HomePage.vue'),
+  },
+
+    //Ex9.1
+  {
+    path: '/product',
+    name: 'Product',
+    component: () => import('../components/Unit09/Product'),
   },
 
 
