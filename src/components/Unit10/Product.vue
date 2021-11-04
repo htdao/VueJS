@@ -94,7 +94,7 @@
         <el-col :span="12">
           Hình ảnh
           <div class="uploadImg">
-            <UploadImage/>
+            <UploadImage @onChangeAvatar="onChangeAvatar"></UploadImage>
           </div>
         </el-col>
         <el-col :span="12">
@@ -116,9 +116,6 @@
               <el-input v-model="price"></el-input>
             </div>
           </el-row>
-          <el-row>
-              <el-input v-model="avatarUrl"></el-input>
-          </el-row>
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
@@ -126,9 +123,15 @@
         <el-button type="primary" @click="handleAddProduct">Tạo mới</el-button>
       </span>
     </el-dialog>
-    <el-dialog width="35%" top="5vh" title="Cập nhật sản phẩm" :visible.sync="dialogUpdateProduct" class="modalProduct">
+    <el-dialog width="50%" top="5vh" title="Cập nhật sản phẩm" :visible.sync="dialogUpdateProduct" class="modalProduct">
       <el-row :gutter="24">
-        <el-col :span="24">
+        <el-col :span="12">
+          Hình ảnh
+          <div class="uploadImg">
+            <UploadImage :avatar="avatar" @onChangeAvatar="onChangeAvatar"></UploadImage>
+          </div>
+        </el-col>
+        <el-col :span="12">
           <el-row>
             <div class="inputWarp">
               <label>Tên sản phẩm <span class="required">*</span></label>
@@ -145,45 +148,6 @@
             <div class="inputWarp">
               <label>Giá <span class="required">*</span></label>
               <el-input  v-model="price"></el-input>
-            </div>
-          </el-row>
-          <el-row>
-            <div class="inputWarp">
-              <label>Hình ảnh <span class="required">*</span></label><br>
-              <div>
-                <div class="col-lg-9 col-xl-6">
-                  <div class="image-input image-input-outline" id="kt_profile">
-                    <div class="image-input-wrapper">
-                      <img
-                          class="el-upload-list__item-thumbnail avatar"
-                          v-if="avatarUrl"
-                          :src="avatarUrl"
-                      >
-                      <img
-                          class="el-upload-list__item-thumbnail avatar"
-                          v-else
-                          :src="`http://vuecourse.zent.edu.vn/storage/${avatar}`"
-                      >
-                    </div>
-                    <label
-                        class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                        data-action="change"
-                        data-toggle="tooltip"
-                        title=""
-                        data-original-title="Change avatar"
-                    >
-                      <i class="fa fa-pen icon-sm text-muted"></i>
-                      <input
-                          type="file"
-                          name="profile_avatar"
-                          accept="image/*"
-                          @change="onChangeAvatar"
-                      />
-                      <input v-model="avatar" type="hidden" name="profile_avatar_remove" />
-                    </label>
-                  </div>
-                </div>
-              </div>
             </div>
           </el-row>
         </el-col>
@@ -227,18 +191,14 @@ export default {
       dialogVisible: false,
       disabled: false,
       avatarUrl: null,
-      avatar:null
+      avatar: '',
+      data: {}
     }
   },
   mounted() {
     this.getListProduct();
   },
   watch: {
-    // avatarUrl(){
-    //   if (this.avatarUrl && this.avatarUrl.length >0){
-    //     this.avatar = null
-    //   }
-    // },
     searchKey:function () {
       if(this.searchKey.length === 0){
         this.getListProduct()
@@ -356,7 +316,7 @@ export default {
       this.description = ''
       this.price = ''
       this.id = ''
-      this.avatar = null
+      this.avatar = ''
       this.avatarUrl = null
     },
     handleSearch(){
@@ -365,11 +325,9 @@ export default {
         }
       this.getListProduct(param);
     },
-    onChangeAvatar(e) {
-      if (e.target.files.length) {
-        this.avatar = e.target.files[0];
-        this.avatarUrl = URL.createObjectURL(e.target.files[0]);
-      }
+    onChangeAvatar(data) {
+        this.avatar = data.avatar;
+        this.avatarUrl = data.avatarUrl;
     },
   }
 }

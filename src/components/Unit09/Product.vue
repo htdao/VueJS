@@ -186,8 +186,13 @@
                       >
                       <img
                           class="el-upload-list__item-thumbnail avatar"
-                          v-else
+                          v-else-if="avatar"
                           :src="`http://vuecourse.zent.edu.vn/storage/${avatar}`"
+                      >
+                      <img
+                          class="el-upload-list__item-thumbnail avatar"
+                          v-else
+                          src=""
                       >
                     </div>
                     <label
@@ -381,7 +386,6 @@ export default {
       this.id = ''
       this.avatar = null
       this.avatarUrl = null
-
     },
     handleSearch(){
       let param = {
