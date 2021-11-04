@@ -30,6 +30,14 @@
           </template>
         </el-table-column>
         <el-table-column
+            width="120px"
+            label="Ảnh"
+        >
+          <template slot-scope="product">
+            <img :src="`http://vuecourse.zent.edu.vn/storage/${product.row.image}`" alt="" class="img_user">
+          </template>
+        </el-table-column>
+        <el-table-column
             min-width="100px"
             prop="description"
             label="Mô tả">
@@ -102,6 +110,40 @@
               <el-input v-model="price"></el-input>
             </div>
           </el-row>
+          <el-row>
+            <div class="inputWarp">
+              <label>Hình ảnh <span class="required">*</span></label><br>
+              <div>
+                <div class="col-lg-9 col-xl-6">
+                  <div class="image-input image-input-outline" id="kt_profile_avatar">
+                    <div class="image-input-wrapper">
+                      <img
+                          class="el-upload-list__item-thumbnail avatar"
+                          v-if="avatarUrl"
+                          :src="avatarUrl"
+                      >
+                    </div>
+                    <label
+                        class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                        data-action="change"
+                        data-toggle="tooltip"
+                        title=""
+                        data-original-title="Change avatar"
+                    >
+                      <i class="fa fa-pen icon-sm text-muted"></i>
+                      <input
+                          type="file"
+                          name="profile_avatar"
+                          accept="image/*"
+                          @change="onChangeAvatar"
+                      />
+                      <input type="hidden" name="profile_avatar_remove" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </el-row>
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
@@ -128,6 +170,45 @@
             <div class="inputWarp">
               <label>Giá <span class="required">*</span></label>
               <el-input  v-model="price"></el-input>
+            </div>
+          </el-row>
+          <el-row>
+            <div class="inputWarp">
+              <label>Hình ảnh <span class="required">*</span></label><br>
+              <div>
+                <div class="col-lg-9 col-xl-6">
+                  <div class="image-input image-input-outline" id="kt_profile">
+                    <div class="image-input-wrapper">
+                      <img
+                          class="el-upload-list__item-thumbnail avatar"
+                          v-if="avatarUrl"
+                          :src="avatarUrl"
+                      >
+                      <img
+                          class="el-upload-list__item-thumbnail avatar"
+                          v-else
+                          :src="`http://vuecourse.zent.edu.vn/storage/${avatar}`"
+                      >
+                    </div>
+                    <label
+                        class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                        data-action="change"
+                        data-toggle="tooltip"
+                        title=""
+                        data-original-title="Change avatar"
+                    >
+                      <i class="fa fa-pen icon-sm text-muted"></i>
+                      <input
+                          type="file"
+                          name="profile_avatar"
+                          accept="image/*"
+                          @change="onChangeAvatar"
+                      />
+                      <input v-model="avatar" type="hidden" name="profile_avatar_remove" />
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
           </el-row>
         </el-col>
@@ -164,13 +245,23 @@ export default {
       description: '',
       price: '',
       image: '',
-      fileList: []
+      fileList: [],
+      dialogImageUrl: '',
+      dialogVisible: false,
+      disabled: false,
+      avatarUrl: null,
+      avatar:null
     }
   },
   mounted() {
     this.getListProduct();
   },
   watch: {
+    // avatarUrl(){
+    //   if (this.avatarUrl && this.avatarUrl.length >0){
+    //     this.avatar = null
+    //   }
+    // },
     searchKey:function () {
       if(this.searchKey.length === 0){
         this.getListProduct()
@@ -209,15 +300,19 @@ export default {
       })
     },
     handleAddProduct(){
-      axios({
-        method: 'post',
-        url: 'http://vuecourse.zent.edu.vn/api/products',
-        data: {
-          name: this.name,
-          description: this.description,
-          price: this.price,
-        }
-      }).then(() => {
+      let data = new FormData();
+      data.append('name', this.name);
+      data.append('description', this.description);
+      data.append('price', this.price);
+      data.append('image', this.avatar);
+      axios.post('http://vuecourse.zent.edu.vn/api/products',
+          data,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+      ).then(() => {
         this.getListProduct()
         this.clearForm()
         this.dialogAddProduct = false
@@ -232,18 +327,23 @@ export default {
       this.name = _.get(product, 'name', "")
       this.description = _.get(product, 'description', "")
       this.price = _.get(product, 'price', "")
+      this.avatar = _.get(product, 'image', "")
       this.dialogUpdateProduct = true
     },
     handleUpdateProduct(){
-      axios({
-        method: 'post',
-        url: 'http://vuecourse.zent.edu.vn/api/products/'+this.id,
-        data: {
-          name: this.name,
-          description: this.description,
-          price: this.price,
-        }
-      }).then(() => {
+      let data = new FormData();
+      data.append('name', this.name);
+      data.append('description', this.description);
+      data.append('price', this.price);
+      data.append('image', this.avatar);
+      axios.post('http://vuecourse.zent.edu.vn/api/products/'+this.id,
+          data,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+      ).then(() => {
         this.getListProduct()
         this.clearForm()
         this.dialogUpdateProduct = false
@@ -279,13 +379,21 @@ export default {
       this.description = ''
       this.price = ''
       this.id = ''
+      this.avatar = null
+      this.avatarUrl = null
     },
     handleSearch(){
       let param = {
           q: this.searchKey
         }
       this.getListProduct(param);
-    }
+    },
+    onChangeAvatar(e) {
+      if (e.target.files.length) {
+        this.avatar = e.target.files[0];
+        this.avatarUrl = URL.createObjectURL(e.target.files[0]);
+      }
+    },
   }
 }
 </script>
@@ -304,7 +412,7 @@ export default {
     .product_name{
       text-decoration: none;
       font-weight: bold;
-      color: #00acc1;
+      //color: #00acc1;
     }
 
     .input-search{
@@ -337,6 +445,13 @@ export default {
   .required{
     color: red;
   }
-
+.avatar{
+  width: 100px;
+  margin-right: 400px;
+  object-fit: cover;
+}
+  .img_user{
+    width: 50px;
+  }
 }
 </style>
