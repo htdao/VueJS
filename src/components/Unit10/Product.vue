@@ -89,9 +89,15 @@
         </el-col>
       </div>
     </el-card>
-    <el-dialog width="35%" top="5vh" title="Thêm mới sản phẩm" :visible.sync="dialogAddProduct" class="modalProduct">
+    <el-dialog width="50%" top="5vh" title="Thêm mới sản phẩm" :visible.sync="dialogAddProduct" class="modalProduct">
       <el-row :gutter="24">
-        <el-col :span="24">
+        <el-col :span="12">
+          Hình ảnh
+          <div class="uploadImg">
+            <UploadImage/>
+          </div>
+        </el-col>
+        <el-col :span="12">
           <el-row>
             <div class="inputWarp">
               <label>Tên sản phẩm <span class="required">*</span></label>
@@ -111,38 +117,7 @@
             </div>
           </el-row>
           <el-row>
-            <div class="inputWarp">
-              <label>Hình ảnh <span class="required">*</span></label><br>
-              <div>
-                <div class="col-lg-9 col-xl-6">
-                  <div class="image-input image-input-outline" id="kt_profile_avatar">
-                    <div class="image-input-wrapper">
-                      <img
-                          class="el-upload-list__item-thumbnail avatar"
-                          v-if="avatarUrl"
-                          :src="avatarUrl"
-                      >
-                    </div>
-                    <label
-                        class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                        data-action="change"
-                        data-toggle="tooltip"
-                        title=""
-                        data-original-title="Change avatar"
-                    >
-                      <i class="fa fa-pen icon-sm text-muted"></i>
-                      <input
-                          type="file"
-                          name="profile_avatar"
-                          accept="image/*"
-                          @change="onChangeAvatar"
-                      />
-                      <input type="hidden" name="profile_avatar_remove" />
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
+              <el-input v-model="avatarUrl"></el-input>
           </el-row>
         </el-col>
       </el-row>
@@ -225,8 +200,10 @@
 // import moment from 'moment'
 import _ from 'lodash'
 import axios from "axios";
+import UploadImage from "./UploadImage";
 export default {
   name: "Product",
+  components: {UploadImage},
   data(){
     return{
       dialogAddProduct: false,
@@ -381,7 +358,6 @@ export default {
       this.id = ''
       this.avatar = null
       this.avatarUrl = null
-
     },
     handleSearch(){
       let param = {
@@ -454,5 +430,9 @@ export default {
   .img_user{
     width: 50px;
   }
+}
+.uploadImg{
+  width: 100%;
+  height: 100%;
 }
 </style>

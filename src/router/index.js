@@ -108,11 +108,18 @@ const routes = [
     component: () => import('../components/Ex/Ex05/HomePage.vue'),
   },
 
-    //Ex9.1
+    //Ex9.1, 10.1
   {
     path: '/product',
     name: 'Product',
     component: () => import('../components/Unit09/Product'),
+  },
+
+    //Ex10.2
+  {
+    path: '/product-image',
+    name: 'ProductImage',
+    component: () => import('../components/Unit10/Product'),
   },
 
 
